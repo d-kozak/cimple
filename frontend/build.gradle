@@ -36,11 +36,11 @@ npm_run_build {
 
 
 
-task packageNpmApp(type: Zip) {
+task packageApp(type: Zip) {
     dependsOn npm_run_build
-    baseName 'npm-app'
+    baseName 'io.dkozak.cimple.frontend'
     extension 'jar'
-    destinationDir file("${projectDir}/build_packageNpmApp")
+    destinationDir file("${projectDir}/jar")
     from('build') {
         // optional path under which output will be visible in Java classpath, e.g. static resources path
         into 'static'
@@ -54,12 +54,12 @@ configurations {
 configurations.default.extendsFrom(configurations.npmResources)
 
 artifacts {
-    npmResources(packageNpmApp.archivePath) {
-        builtBy packageNpmApp
+    npmResources(packageApp.archivePath) {
+        builtBy packageApp
         type "jar"
     }
 }
 
 clean {
-    delete packageNpmApp.archivePath
+    delete packageApp.archivePath
 }
