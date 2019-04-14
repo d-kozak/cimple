@@ -145,4 +145,47 @@ class LexerTest {
         }
 
     }
+
+    @Nested
+    inner class Spaces {
+
+        @Test
+        fun `420 + 8080,42`() {
+            val input = "420 + 8080.42"
+            val lexer = Lexer(input)
+            assertThat(lexer.getNextToken())
+                    .isInstanceOf(IntToken::class.java)
+                    .extracting { token -> (token as IntToken).value }
+                    .isEqualTo(420)
+            assertThat(lexer.getNextToken()).isEqualTo(Plus)
+            assertThat(lexer.getNextToken())
+                    .isInstanceOf(DoubleToken::class.java)
+                    .extracting { token -> (token as DoubleToken).value }
+                    .isEqualTo(8080.42)
+
+        }
+
+        @Test
+        fun `420   +        8080,42    divide   135`() {
+            val input = "420   +        8080.42    /   135"
+            val lexer = Lexer(input)
+            assertThat(lexer.getNextToken())
+                    .isInstanceOf(IntToken::class.java)
+                    .extracting { token -> (token as IntToken).value }
+                    .isEqualTo(420)
+            assertThat(lexer.getNextToken()).isEqualTo(Plus)
+            assertThat(lexer.getNextToken())
+                    .isInstanceOf(DoubleToken::class.java)
+                    .extracting { token -> (token as DoubleToken).value }
+                    .isEqualTo(8080.42)
+            assertThat(lexer.getNextToken()).isEqualTo(Divide)
+            assertThat(lexer.getNextToken())
+                    .isInstanceOf(IntToken::class.java)
+                    .extracting { token -> (token as IntToken).value }
+                    .isEqualTo(135)
+
+        }
+
+
+    }
 }

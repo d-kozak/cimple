@@ -8,6 +8,10 @@ class Lexer(private val input: String) {
     fun getNextToken(): Token? {
         if (currentIndex >= input.length) return null
 
+        while (currentIndex < input.length && input[currentIndex].isWhitespace()) {
+            currentIndex++
+        }
+
         return when (input[currentIndex++]) {
             '+' -> Plus
             '-' -> Minus
