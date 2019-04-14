@@ -16,7 +16,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build_for_server": "react-scripts build && cp -r ./build/*  ../backend/webserver/src/main/resources/static/"
   },
   "eslintConfig": {
     "extends": "react-app"
