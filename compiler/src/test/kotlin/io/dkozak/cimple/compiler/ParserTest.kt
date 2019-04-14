@@ -51,7 +51,7 @@ class ParserTest {
 
     @Test
     fun `Parse ((1 + 2) * 3) div (5)`() {
-        val result = parseIt("((1 + 2) * 3) div (5)")
+        val result = parseIt("((1 + 2) * 3) / (5)")
         assertThat(result).isEqualTo(
                 DivideNode(
                         MultiplyNode(

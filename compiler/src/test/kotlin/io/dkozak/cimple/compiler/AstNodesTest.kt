@@ -24,29 +24,29 @@ class AstNodesTest {
 
         @Test
         fun `Double literals`() {
-            assertThat(DoubleLiteral(42))
-                    .isEqualTo(DoubleLiteral(42))
-            assertThat(DoubleLiteral(10))
-                    .isEqualTo(DoubleLiteral(10))
-            assertThat(DoubleLiteral(10))
-                    .isNotEqualTo(DoubleLiteral(55))
+            assertThat(DoubleLiteral(42.7))
+                    .isEqualTo(DoubleLiteral(42.7))
+            assertThat(DoubleLiteral(10.4))
+                    .isEqualTo(DoubleLiteral(10.4))
+            assertThat(DoubleLiteral(10.9))
+                    .isNotEqualTo(DoubleLiteral(55.7))
 
-            assertThat(DoubleLiteral(10))
-                    .isNotEqualTo(10)
+            assertThat(DoubleLiteral(10.5))
+                    .isNotEqualTo(10.5)
         }
 
         @Test
         fun simpleTrees() {
             assertThat(
-                    PlusNode(IntLiteral(10), DoubleLiteral(15))
+                    PlusNode(IntLiteral(10), DoubleLiteral(15.4))
             ).isEqualTo(
-                    PlusNode(IntLiteral(10), DoubleLiteral(15))
+                    PlusNode(IntLiteral(10), DoubleLiteral(15.4))
             )
 
             assertThat(
-                    PlusNode(IntLiteral(10), MultiplyNode(DoubleLiteral(6), IntLiteral(8)))
+                    PlusNode(IntLiteral(10), MultiplyNode(DoubleLiteral(6.2), IntLiteral(8)))
             ).isEqualTo(
-                    PlusNode(IntLiteral(10), MultiplyNode(DoubleLiteral(6), IntLiteral(8)))
+                    PlusNode(IntLiteral(10), MultiplyNode(DoubleLiteral(6.2), IntLiteral(8)))
             )
         }
 
