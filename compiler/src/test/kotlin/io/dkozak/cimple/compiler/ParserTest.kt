@@ -24,6 +24,21 @@ class ParserTest {
     }
 
     @Test
+    fun `Parse 1 + 2 * 3`() {
+        val result = parseIt("1 + 2 * 3")
+        assertThat(result).isEqualTo(
+                PlusNode(
+                        IntLiteral(1),
+                        MultiplyNode(
+                                IntLiteral(2),
+                                IntLiteral(3)
+                        )
+                )
+        )
+    }
+
+
+    @Test
     fun `Parse (1 + 2) * 3`() {
         val result = parseIt("(1 + 2) * 3")
         assertThat(result).isEqualTo(
