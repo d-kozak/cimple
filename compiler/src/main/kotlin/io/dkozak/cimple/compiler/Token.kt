@@ -10,3 +10,5 @@ object Multiply : Token()
 object Divide : Token()
 object ParenOpen : Token()
 object ParenClose : Token()
+
+class UnknownCharacters(val value: String) : Token()

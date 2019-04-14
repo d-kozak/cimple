@@ -17,6 +17,10 @@ fun ObjectAssert<*>.isDoubleToken(expectedValue: Double): AbstractObjectAssert<*
         .extracting { token -> (token as DoubleToken).value }
         .isEqualTo(expectedValue)
 
+fun ObjectAssert<*>.isUnkownCharacters(expectedValue: String): AbstractObjectAssert<*, *> = this.isInstanceOf(UnknownCharacters::class.java)
+        .extracting { token -> (token as UnknownCharacters).value }
+        .isEqualTo(expectedValue)
+
 
 class LexerTest {
 
@@ -212,5 +216,39 @@ class LexerTest {
         }
 
 
+    }
+
+    @Nested
+    inner class InvalidInput {
+
+        @Test
+        fun `Some characters`() {
+            val input = "adjfhsdjakhfjkdsa"
+            val lexer = Lexer(input)
+            assertThat(lexer.getNextToken())
+                    .isUnkownCharacters(input)
+        }
+
+
+        @Test
+        fun `Combination of valid and invalid`() {
+            val lexer = Lexer("xxx(1+asfdsa)*1")
+            assertThat(lexer.getNextToken())
+                    .isUnkownCharacters("xxx")
+            assertThat(lexer.getNextToken())
+                    .isEqualTo(ParenOpen)
+            assertThat(lexer.getNextToken())
+                    .isIntToken(1)
+            assertThat(lexer.getNextToken())
+                    .isEqualTo(Plus)
+            assertThat(lexer.getNextToken())
+                    .isUnkownCharacters("asfdsa")
+            assertThat(lexer.getNextToken())
+                    .isEqualTo(ParenClose)
+            assertThat(lexer.getNextToken())
+                    .isEqualTo(Multiply)
+            assertThat(lexer.getNextToken())
+                    .isIntToken(1)
+        }
     }
 }

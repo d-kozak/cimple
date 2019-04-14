@@ -21,9 +21,18 @@ class Lexer(private val input: String) {
             ')' -> ParenClose
             else -> {
                 currentIndex--
-                intergerOrDouble()
+                if (input[currentIndex].isDigit())
+                    intergerOrDouble()
+                else unknownCharacters()
             }
         }
+    }
+
+    private fun unknownCharacters(): Token {
+        var startIndex = currentIndex
+        while (currentIndex < input.length && !(input[currentIndex].isDigit() || input[currentIndex].isWhitespace() || input[currentIndex] in setOf('+', '-', '*', '/', '(', ')')))
+            currentIndex++
+        return UnknownCharacters(input.substring(startIndex, currentIndex))
     }
 
     private fun intergerOrDouble(): Token {
