@@ -128,6 +128,61 @@ class LexerTest {
 
     }
 
+
+    @Nested
+    inner class Parens {
+
+        @Test
+        fun `expression (12+15,13)*11`() {
+            val lexer = Lexer("     (12 + 15.13   )  *       11  ")
+            assertThat(lexer.getNextToken())
+                    .isEqualTo(ParenOpen)
+            assertThat(lexer.getNextToken())
+                    .isIntToken(12)
+            assertThat(lexer.getNextToken())
+                    .isEqualTo(Plus)
+            assertThat(lexer.getNextToken())
+                    .isDoubleToken(15.13)
+            assertThat(lexer.getNextToken())
+                    .isEqualTo(ParenClose)
+            assertThat(lexer.getNextToken())
+                    .isEqualTo(Multiply)
+            assertThat(lexer.getNextToken())
+                    .isIntToken(11)
+        }
+
+        @Test
+        fun `expression ds(1+(2-3))*(5)`() {
+            val lexer = Lexer("  ( 1 + ( 2 - 3 ) ) * ( 5 ) ")
+            assertThat(lexer.getNextToken())
+                    .isEqualTo(ParenOpen)
+            assertThat(lexer.getNextToken())
+                    .isIntToken(1)
+            assertThat(lexer.getNextToken())
+                    .isEqualTo(Plus)
+            assertThat(lexer.getNextToken())
+                    .isEqualTo(ParenOpen)
+            assertThat(lexer.getNextToken())
+                    .isIntToken(2)
+            assertThat(lexer.getNextToken())
+                    .isEqualTo(Minus)
+            assertThat(lexer.getNextToken())
+                    .isIntToken(3)
+            assertThat(lexer.getNextToken())
+                    .isEqualTo(ParenClose)
+            assertThat(lexer.getNextToken())
+                    .isEqualTo(ParenClose)
+            assertThat(lexer.getNextToken())
+                    .isEqualTo(Multiply)
+            assertThat(lexer.getNextToken())
+                    .isEqualTo(ParenOpen)
+            assertThat(lexer.getNextToken())
+                    .isIntToken(5)
+            assertThat(lexer.getNextToken())
+                    .isEqualTo(ParenClose)
+        }
+    }
+
     @Nested
     inner class Spaces {
 

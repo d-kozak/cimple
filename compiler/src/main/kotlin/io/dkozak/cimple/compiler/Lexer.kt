@@ -17,6 +17,8 @@ class Lexer(private val input: String) {
             '-' -> Minus
             '*' -> Multiply
             '/' -> Divide
+            '(' -> ParenOpen
+            ')' -> ParenClose
             else -> {
                 currentIndex--
                 intergerOrDouble()
