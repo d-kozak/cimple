@@ -6,6 +6,22 @@ class Lexer(private val input: String) {
 
 
     fun getNextToken(): Token? {
+        if (currentIndex >= input.length) return null
+
+        return when (input[currentIndex++]) {
+            '+' -> Plus
+            '-' -> Minus
+            '*' -> Multiply
+            '/' -> Divide
+            else -> {
+                currentIndex--
+                intergerOrDouble()
+            }
+        }
+    }
+
+    private fun intergerOrDouble(): Token {
+        var startIndex = currentIndex
         while (currentIndex < input.length && input[currentIndex].isDigit()) {
             currentIndex++
         }
@@ -13,14 +29,14 @@ class Lexer(private val input: String) {
             currentIndex++
             if (currentIndex == input.length || (currentIndex < input.length && !input[currentIndex].isDigit())) {
                 currentIndex--
-                return IntToken(input.substring(0, currentIndex).toInt())
+                return IntToken(input.substring(startIndex, currentIndex).toInt())
             }
             while (currentIndex < input.length && input[currentIndex].isDigit()) {
                 currentIndex++
             }
-            return DoubleToken(input.substring(0, currentIndex).toDouble())
+            return DoubleToken(input.substring(startIndex, currentIndex).toDouble())
         }
 
-        return IntToken(input.substring(0, currentIndex).toInt())
+        return IntToken(input.substring(startIndex, currentIndex).toInt())
     }
 }
