@@ -4,6 +4,7 @@
 package compiler
 
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class LibraryTest {
@@ -11,5 +12,11 @@ class LibraryTest {
     fun testSomeLibraryMethod() {
         val classUnderTest = Library()
         assertTrue(classUnderTest.someLibraryMethod(), "someLibraryMethod should return 'true'")
+    }
+
+    @Test
+    fun calculateTheAnswerTest() {
+        val classUnderTest = Library()
+        assertEquals(classUnderTest.calculateTheAnswer(), 42)
     }
 }
