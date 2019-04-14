@@ -2,6 +2,13 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/cimple.iml" filepath="$PROJECT_DIR$/cimple.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/compiler/cimple.compiler.iml" filepath="$PROJECT_DIR$/.idea/modules/compiler/cimple.compiler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/compiler/cimple.compiler.main.iml" filepath="$PROJECT_DIR$/.idea/modules/compiler/cimple.compiler.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/compiler/cimple.compiler.test.iml" filepath="$PROJECT_DIR$/.idea/modules/compiler/cimple.compiler.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/webserver/cimple.webserver.iml" filepath="$PROJECT_DIR$/.idea/modules/webserver/cimple.webserver.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/webserver/cimple.webserver.main.iml" filepath="$PROJECT_DIR$/.idea/modules/webserver/cimple.webserver.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/webserver/cimple.webserver.test.iml" filepath="$PROJECT_DIR$/.idea/modules/webserver/cimple.webserver.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/frontend/frontend.iml" filepath="$PROJECT_DIR$/frontend/frontend.iml" />
     </modules>
   </component>
