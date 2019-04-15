@@ -1,7 +1,5 @@
 package io.dkozak.cimple.compiler
 
-import org.assertj.core.api.Assertions.assertThat
-
 class Parser(private val buffer: Buffer) {
 
     /**
@@ -15,37 +13,73 @@ class Parser(private val buffer: Buffer) {
      */
 
 
-    fun parse(): AstNode = expression()
+    fun parse(): AstNode = expressionList()
+
+    private fun expressionList(): AstNode {
+        return expression()
+    }
+
 
     private fun expression(): AstNode {
         val left = term()
+        if (left is ErrorNode) {
+            if (!left.recoveryPerformed)
+                buffer.skipUntilNewline()
+            return left
+        }
         return when (buffer.peek()) {
             Plus -> {
                 buffer.consume()
-                PlusNode(left, expression())
+                val right = expression()
+                if (right is ErrorNode) {
+                    if (!right.recoveryPerformed)
+                        buffer.skipUntilNewline()
+                    return right
+                }
+                PlusNode(left, right)
             }
             Minus -> {
                 buffer.consume()
-                MinusNode(left, expression())
+                val right = expression()
+                if (right is ErrorNode) {
+                    if (!right.recoveryPerformed)
+                        buffer.skipUntilNewline()
+                    return right
+                }
+                MinusNode(left, right)
             }
-            else -> left
+            in setOf(ParenClose, Newline) -> left
+            null -> left
+            else -> {
+                val message = "Unexpected token ${buffer.peek()} in expression"
+                buffer.skipUntilNewline()
+                ErrorNode(message, true)
+            }
         }
     }
 
     private fun term(): AstNode {
         val left = functor()
+        if (left is ErrorNode)
+            return left
         return when (buffer.peek()) {
             Multiply -> {
                 buffer.consume()
-                MultiplyNode(left, term())
+                val right = term()
+                if (right is ErrorNode)
+                    return right
+                MultiplyNode(left, right)
             }
             Divide -> {
                 buffer.consume()
-                DivideNode(left, term())
+                val right = term()
+                if (right is ErrorNode)
+                    return right
+                DivideNode(left, right)
             }
-            in setOf(Plus, Minus, ParenClose) -> left
+            in setOf(Plus, Minus, ParenClose, Newline) -> left
             null -> left
-            else -> TODO("handle parser error ${buffer.peek()}")
+            else -> ErrorNode("Unexpected ${buffer.peek()} in rule term")
         }
     }
 
@@ -54,18 +88,17 @@ class Parser(private val buffer: Buffer) {
         return when (token) {
             ParenOpen -> {
                 val expr = expression()
-                require(ParenClose)
+                if (expr is ErrorNode)
+                    return expr
+                val nextToken = buffer.consume()
+                if (nextToken != ParenClose)
+                    ErrorNode("Expected parent close, got $nextToken")
                 expr
             }
             is IntToken -> IntLiteral(token.value)
             is DoubleToken -> DoubleLiteral(token.value)
-            else -> TODO("handle parser error ${buffer.peek()}")
+            else -> ErrorNode("Unexpected ${buffer.peek()} in rule functor")
         }
-    }
-
-    private fun require(token: Token) {
-        assertThat(buffer.consume())
-                .isEqualTo(token)
     }
 
 }

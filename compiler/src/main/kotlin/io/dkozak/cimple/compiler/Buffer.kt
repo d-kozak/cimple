@@ -17,4 +17,8 @@ class Buffer(private val lexer: Lexer) {
         }
         return lexer.getNextToken()
     }
+
+    fun skipUntilNewline() {
+        lexer.skipUntilNewline()
+    }
 }

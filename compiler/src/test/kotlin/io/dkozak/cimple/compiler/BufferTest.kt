@@ -127,4 +127,13 @@ class BufferTest {
         verify(exactly = 3) { lexer.getNextToken() }
     }
 
+    @Test
+    fun `Verify skip to newline call is propagated`() {
+        val lexer = mockk<Lexer>()
+        val buffer = Buffer(lexer)
+        every { lexer.skipUntilNewline() } returns Unit
+        buffer.skipUntilNewline()
+        verify(exactly = 1) { lexer.skipUntilNewline() }
+    }
+
 }
