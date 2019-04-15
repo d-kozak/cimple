@@ -5,7 +5,7 @@ class Parser(private val buffer: Buffer) {
     /**
      * Grammar
      *
-     * start -> (E '\n')*
+     * start -> (E '\n'?)*
      * E -> T + E | T - E | T
      * T -> F * T | F / T | F
      * F -> (E) | int | double
@@ -16,15 +16,18 @@ class Parser(private val buffer: Buffer) {
     fun parse(): AstNode = expressionList()
 
     private fun expressionList(): AstNode {
-        return expression()
+        val result = mutableListOf<AstNode>()
+        while (buffer.peek() != null) {
+            result.add(expression())
+            buffer.skipUntilNewline()
+        }
+        return ExpressionList(result)
     }
 
 
-    private fun expression(): AstNode {
+    fun expression(): AstNode {
         val left = term()
         if (left is ErrorNode) {
-            if (!left.recoveryPerformed)
-                buffer.skipUntilNewline()
             return left
         }
         return when (buffer.peek()) {
@@ -32,8 +35,6 @@ class Parser(private val buffer: Buffer) {
                 buffer.consume()
                 val right = expression()
                 if (right is ErrorNode) {
-                    if (!right.recoveryPerformed)
-                        buffer.skipUntilNewline()
                     return right
                 }
                 PlusNode(left, right)
@@ -42,8 +43,6 @@ class Parser(private val buffer: Buffer) {
                 buffer.consume()
                 val right = expression()
                 if (right is ErrorNode) {
-                    if (!right.recoveryPerformed)
-                        buffer.skipUntilNewline()
                     return right
                 }
                 MinusNode(left, right)
@@ -51,9 +50,7 @@ class Parser(private val buffer: Buffer) {
             in setOf(ParenClose, Newline) -> left
             null -> left
             else -> {
-                val message = "Unexpected token ${buffer.peek()} in expression"
-                buffer.skipUntilNewline()
-                ErrorNode(message, true)
+                ErrorNode("Unexpected token ${buffer.peek()} in expression")
             }
         }
     }
@@ -79,7 +76,7 @@ class Parser(private val buffer: Buffer) {
             }
             in setOf(Plus, Minus, ParenClose, Newline) -> left
             null -> left
-            else -> ErrorNode("Unexpected ${buffer.peek()} in rule term")
+            else -> ErrorNode("Unexpected token ${buffer.peek()} in rule term")
         }
     }
 
@@ -97,7 +94,7 @@ class Parser(private val buffer: Buffer) {
             }
             is IntToken -> IntLiteral(token.value)
             is DoubleToken -> DoubleLiteral(token.value)
-            else -> ErrorNode("Unexpected ${buffer.peek()} in rule functor")
+            else -> ErrorNode("Unexpected token $token in rule functor")
         }
     }
 

@@ -4,7 +4,9 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-fun parseIt(input: String) = Parser(Buffer(Lexer(input))).parse()
+fun parseExpression(input: String) = Parser(Buffer(Lexer(input))).expression()
+
+fun parseExpressionList(input: String) = Parser(Buffer(Lexer(input))).parse()
 
 class ParserTest {
 
@@ -12,7 +14,7 @@ class ParserTest {
     inner class OneExpression {
         @Test
         fun `Parse 1 + 1`() {
-            val result = parseIt("1 + 1")
+            val result = parseExpression("1 + 1")
             assertThat(result).isEqualTo(
                     PlusNode(IntLiteral(1), IntLiteral(1))
             )
@@ -20,7 +22,7 @@ class ParserTest {
 
         @Test
         fun `Parse 1 div 1`() {
-            val result = parseIt("1 / 1")
+            val result = parseExpression("1 / 1")
             assertThat(result).isEqualTo(
                     DivideNode(IntLiteral(1), IntLiteral(1))
             )
@@ -28,7 +30,7 @@ class ParserTest {
 
         @Test
         fun `Parse 1 + 2 * 3`() {
-            val result = parseIt("1 + 2 * 3")
+            val result = parseExpression("1 + 2 * 3")
             assertThat(result).isEqualTo(
                     PlusNode(
                             IntLiteral(1),
@@ -43,7 +45,7 @@ class ParserTest {
 
         @Test
         fun `Parse (1 + 2) * 3`() {
-            val result = parseIt("(1 + 2) * 3")
+            val result = parseExpression("(1 + 2) * 3")
             assertThat(result).isEqualTo(
                     MultiplyNode(
                             PlusNode(IntLiteral(1), IntLiteral(2)),
@@ -54,7 +56,7 @@ class ParserTest {
 
         @Test
         fun `Parse ((1 + 2) * 3) div (5)`() {
-            val result = parseIt("((1 + 2) * 3) / (5)")
+            val result = parseExpression("((1 + 2) * 3) / (5)")
             assertThat(result).isEqualTo(
                     DivideNode(
                             MultiplyNode(
@@ -66,11 +68,11 @@ class ParserTest {
     }
 
     @Nested
-    inner class MultipleExpressions() {
+    inner class MultipleExpressions {
 
         @Test
         fun `parse 1 + 1 and 2 * 3`() {
-            val result = parseIt("1 + 5 \n 2 * 3")
+            val result = parseExpressionList("1 + 5 \n 2 * 3")
             assertThat(result)
                     .isEqualTo(ExpressionList(listOf(
                             PlusNode(IntLiteral(1), IntLiteral(5)),
