@@ -19,6 +19,9 @@ class Buffer(private val lexer: Lexer) {
     }
 
     fun skipUntilNewline() {
-        lexer.skipUntilNewline()
+        if (buffer != Newline) {
+            lexer.skipUntilNewline()
+        }
+        buffer = null
     }
 }

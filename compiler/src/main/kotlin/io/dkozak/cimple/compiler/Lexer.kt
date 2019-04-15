@@ -25,7 +25,7 @@ class Lexer(private val input: String) {
             else -> {
                 currentIndex--
                 if (input[currentIndex].isDigit())
-                    intergerOrDouble()
+                    integerOrDouble()
                 else unknownCharacters()
             }
         }
@@ -38,7 +38,7 @@ class Lexer(private val input: String) {
         return UnknownCharacters(input.substring(startIndex, currentIndex))
     }
 
-    private fun intergerOrDouble(): Token {
+    private fun integerOrDouble(): Token {
         var startIndex = currentIndex
         while (currentIndex < input.length && input[currentIndex].isDigit()) {
             currentIndex++

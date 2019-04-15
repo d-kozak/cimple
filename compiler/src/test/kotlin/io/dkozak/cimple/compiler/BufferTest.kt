@@ -136,4 +136,32 @@ class BufferTest {
         verify(exactly = 1) { lexer.skipUntilNewline() }
     }
 
+    @Test
+    fun `Verify that skip to newline cleans the buffer`() {
+        val lexer = mockk<Lexer>()
+        val buffer = Buffer(lexer)
+        every { lexer.skipUntilNewline() } returns Unit
+        every { lexer.getNextToken() } returns Newline
+        buffer.skipUntilNewline()
+        assertThat(buffer.peek()).isEqualTo(Newline)
+
+        verify(exactly = 1) { lexer.skipUntilNewline() }
+        verify(exactly = 1) { lexer.getNextToken() }
+    }
+
+    @Test
+    fun `Verify skipUntilNewLine does not trigger skip until newline on the buffer if the buffered token is a newline`() {
+        val lexer = mockk<Lexer>()
+        val buffer = Buffer(lexer)
+        every { lexer.skipUntilNewline() } returns Unit
+        every { lexer.getNextToken() } returns Newline
+
+        assertThat(buffer.peek()).isEqualTo(Newline)
+        buffer.skipUntilNewline()
+
+        verify(exactly = 1) { lexer.getNextToken() }
+        verify(exactly = 0) { lexer.skipUntilNewline() }
+
+    }
+
 }
