@@ -79,6 +79,17 @@ class ParserTest {
                             MultiplyNode(IntLiteral(2), IntLiteral(3))
                     )))
         }
+
+        @Test
+        fun `parse 1 + 1 and 2 * 3 and (5) - 2 * 3`() {
+            val result = parseExpressionList("1 + 5 \n 2 * 3 \n (5) - 2 * 3")
+            assertThat(result)
+                    .isEqualTo(ExpressionList(listOf(
+                            PlusNode(IntLiteral(1), IntLiteral(5)),
+                            MultiplyNode(IntLiteral(2), IntLiteral(3)),
+                            MinusNode(IntLiteral(5), MultiplyNode(IntLiteral(2), IntLiteral(3)))
+                    )))
+        }
     }
 
 }

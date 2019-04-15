@@ -19,7 +19,8 @@ class Parser(private val buffer: Buffer) {
         val result = mutableListOf<AstNode>()
         while (buffer.peek() != null) {
             result.add(expression())
-            buffer.skipUntilNewline()
+            if (buffer.peek() == Newline)
+                buffer.consume()
         }
         return ExpressionList(result)
     }
