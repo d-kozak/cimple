@@ -9,6 +9,8 @@ class Lexer(private val input: String) {
         if (currentIndex >= input.length) return null
 
         while (currentIndex < input.length && input[currentIndex].isWhitespace()) {
+            if (input[currentIndex] == '\n')
+                break
             currentIndex++
         }
 
@@ -19,6 +21,7 @@ class Lexer(private val input: String) {
             '/' -> Divide
             '(' -> ParenOpen
             ')' -> ParenClose
+            '\n' -> Newline
             else -> {
                 currentIndex--
                 if (input[currentIndex].isDigit())
@@ -53,5 +56,10 @@ class Lexer(private val input: String) {
         }
 
         return IntToken(input.substring(startIndex, currentIndex).toInt())
+    }
+
+    fun skipUntilNewline() {
+        while (currentIndex < input.length && input[currentIndex] != '\n')
+            currentIndex++
     }
 }

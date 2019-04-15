@@ -251,4 +251,40 @@ class LexerTest {
                     .isIntToken(1)
         }
     }
+
+    @Nested
+    inner class Newline {
+
+        @Test
+        fun `Lex sequence with newline`() {
+            val lexer = Lexer("10.1 + 7 \n 4 * 9 \n 2")
+            assertThat(lexer.getNextToken())
+                    .isDoubleToken(10.1)
+            assertThat(lexer.getNextToken())
+                    .isEqualTo(Plus)
+            assertThat(lexer.getNextToken())
+                    .isIntToken(7)
+            assertThat(lexer.getNextToken())
+                    .isEqualTo(Newline)
+            assertThat(lexer.getNextToken())
+                    .isIntToken(4)
+            assertThat(lexer.getNextToken())
+                    .isEqualTo(Multiply)
+            assertThat(lexer.getNextToken())
+                    .isIntToken(9)
+            assertThat(lexer.getNextToken())
+                    .isEqualTo(Newline)
+            assertThat(lexer.getNextToken())
+                    .isIntToken(2)
+        }
+
+        @Test
+        fun `Skip a group of tokens until newline`() {
+            val lexer = Lexer("123 () \n42")
+            lexer.skipUntilNewline()
+            assertThat(lexer.getNextToken())
+                    .isIntToken(42)
+
+        }
+    }
 }

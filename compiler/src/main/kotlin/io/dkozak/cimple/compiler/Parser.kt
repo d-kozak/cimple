@@ -7,6 +7,7 @@ class Parser(private val buffer: Buffer) {
     /**
      * Grammar
      *
+     * start -> (E '\n')*
      * E -> T + E | T - E | T
      * T -> F * T | F / T | F
      * F -> (E) | int | double
