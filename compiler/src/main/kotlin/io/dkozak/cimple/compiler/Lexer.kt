@@ -61,5 +61,6 @@ class Lexer(private val input: String) {
     fun skipUntilNewline() {
         while (currentIndex < input.length && input[currentIndex] != '\n')
             currentIndex++
+        currentIndex++ // skip the newline character
     }
 }
