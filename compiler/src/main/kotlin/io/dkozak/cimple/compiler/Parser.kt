@@ -18,8 +18,11 @@ class Parser(private val buffer: Buffer) {
     private fun expressionList(): AstNode {
         val result = mutableListOf<AstNode>()
         while (buffer.peek() != null) {
-            result.add(expression())
-            if (buffer.peek() == Newline)
+            val expression = expression()
+            result.add(expression)
+            if (expression is ErrorNode)
+                buffer.skipUntilNewline()
+            else if (buffer.peek() == Newline)
                 buffer.consume()
         }
         return ExpressionList(result)
@@ -82,20 +85,29 @@ class Parser(private val buffer: Buffer) {
     }
 
     private fun functor(): AstNode {
-        val token = buffer.consume()
+        val token = buffer.peek()
         return when (token) {
             ParenOpen -> {
+                buffer.consume()
                 val expr = expression()
                 if (expr is ErrorNode)
                     return expr
-                val nextToken = buffer.consume()
+                val nextToken = buffer.peek()
                 if (nextToken != ParenClose)
-                    ErrorNode("Expected parent close, got $nextToken")
+                    return ErrorNode("Expected paren close, got $nextToken")
+                buffer.consume()
                 expr
             }
-            is IntToken -> IntLiteral(token.value)
-            is DoubleToken -> DoubleLiteral(token.value)
+            is IntToken -> {
+                buffer.consume()
+                IntLiteral(token.value)
+            }
+            is DoubleToken -> {
+                buffer.consume()
+                DoubleLiteral(token.value)
+            }
             else -> ErrorNode("Unexpected token $token in rule functor")
+
         }
     }
 

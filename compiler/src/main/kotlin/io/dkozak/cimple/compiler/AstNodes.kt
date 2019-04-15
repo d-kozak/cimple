@@ -11,4 +11,13 @@ data class MultiplyNode(val left: AstNode, val right: AstNode) : AstNode()
 data class DivideNode(val left: AstNode, val right: AstNode) : AstNode()
 
 
-data class ErrorNode(val message: String = "") : AstNode()
+class ErrorNode(val message: String = "") : AstNode() {
+
+    override fun hashCode(): Int = 1
+
+    override fun equals(other: Any?): Boolean = other is ErrorNode
+
+    override fun toString(): String {
+        return "ErrorNode(message='$message')"
+    }
+}

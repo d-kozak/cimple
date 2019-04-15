@@ -36,7 +36,7 @@ class AstNodesTest {
         }
 
         @Test
-        fun simpleTrees() {
+        fun `Simple trees`() {
             assertThat(
                     PlusNode(IntLiteral(10), DoubleLiteral(15.4))
             ).isEqualTo(
@@ -48,6 +48,13 @@ class AstNodesTest {
             ).isEqualTo(
                     PlusNode(IntLiteral(10), MultiplyNode(DoubleLiteral(6.2), IntLiteral(8)))
             )
+        }
+
+        @Test
+        fun `Error nodes are always equal`() {
+            assertThat(ErrorNode("Message 1"))
+                    .isEqualTo(ErrorNode("Message 2"))
+                    .isEqualTo(ErrorNode("Message 3"))
         }
 
     }

@@ -92,4 +92,40 @@ class ParserTest {
         }
     }
 
+
+    @Nested
+    inner class ErrorRecovery {
+
+        @Test
+        fun `Fast forward after first expression and parse the second`() {
+            val result = parseExpressionList("1  5 \n (5) - 2 * 3")
+            assertThat(result)
+                    .isEqualTo(ExpressionList(listOf(
+                            ErrorNode(),
+                            MinusNode(IntLiteral(5), MultiplyNode(IntLiteral(2), IntLiteral(3)))
+                    )))
+        }
+
+        @Test
+        fun `Parse first, fast forward the second and parse the third`() {
+            val result = parseExpressionList("1 + 5 \n 1 + 2 * \n (5) - 2 * 3")
+            assertThat(result)
+                    .isEqualTo(ExpressionList(listOf(
+                            PlusNode(IntLiteral(1), IntLiteral(5)),
+                            ErrorNode(),
+                            MinusNode(IntLiteral(5), MultiplyNode(IntLiteral(2), IntLiteral(3)))
+                    )))
+        }
+
+        @Test
+        fun `Fast fast forward first two and parse the third`() {
+            val result = parseExpressionList("1 + (5 \n 1 + 2 * \n (5) - 2 * 3")
+            assertThat(result)
+                    .isEqualTo(ExpressionList(listOf(
+                            ErrorNode(),
+                            ErrorNode(),
+                            MinusNode(IntLiteral(5), MultiplyNode(IntLiteral(2), IntLiteral(3)))
+                    )))
+        }
+    }
 }
