@@ -1,0 +1,5 @@
+fun look(from,to,acc){
+    for i = from ; i < to ; i = i + 1 {
+        acc = acc + i;
+    }
+}
