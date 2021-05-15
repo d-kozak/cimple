@@ -4,6 +4,8 @@ import io.dkozak.cimple.ast.prettyPrint
 import io.dkozak.cimple.ast.toCimpleAst
 import io.dkozak.cimple.cfg.lower
 import io.dkozak.cimple.cfg.prettyPrint
+import io.dkozak.cimple.cfg.toCfg
+import io.dkozak.cimple.cfg.toDotFormat
 import java.io.File
 
 fun readInput(args: Array<String>): String {
@@ -23,10 +25,13 @@ fun run(input: String) {
     val ast = parse(input).toCimpleAst()
     println(ast)
     ast.prettyPrint()
-    ast.functions.map { it.lower() }.forEach {
+    val lowered = ast.functions.map { it.lower() }
+    for (function in lowered) {
         println("---")
-        println(it)
-        it.prettyPrint()
+        println(function)
+        function.prettyPrint()
+        val cfg = function.toCfg()
+        println(cfg.toDotFormat())
     }
 }
 
