@@ -111,7 +111,7 @@ private fun StringBuilder.serialize(node: Node, offset: Int, newLine: Boolean = 
     }
 }
 
-private fun StringBuilder.appendOffset(offset: Int) {
+fun StringBuilder.appendOffset(offset: Int) {
     repeat(offset) {
         append(' ')
     }
