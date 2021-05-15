@@ -82,22 +82,17 @@ data class VariableNode(
     override val location: SourceLocation
 ) : ExpressionNode()
 
-data class ArgumentNode(
-    val name: String,
-    override val location: SourceLocation
-) : Node()
-
-enum class BinaryOperation {
-    MULT,
-    DIV,
-    ADD,
-    SUB,
-    EQ,
-    NE,
-    GT,
-    GE,
-    LT,
-    LE
+enum class BinaryOperation(val asString: String) {
+    MULT("*"),
+    DIV("/"),
+    ADD("+"),
+    SUB("-"),
+    EQ("=="),
+    NE("!="),
+    GT(">"),
+    GE(">="),
+    LT("<"),
+    LE("<=")
 }
 
 fun String.toBinaryOp(): BinaryOperation = when (this) {
