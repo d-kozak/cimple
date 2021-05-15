@@ -47,7 +47,7 @@ data class IfStatementNode(
 ) : StatementNode()
 
 
-data class ForStatement(
+data class ForStatementNode(
     val initializer: VariableDefinitionNode?,
     val condition: ExpressionNode?,
     val increment: VariableDefinitionNode?,
@@ -55,7 +55,7 @@ data class ForStatement(
     override val location: SourceLocation
 ) : StatementNode()
 
-data class ReturnStatement(
+data class ReturnNode(
     val expression: ExpressionNode?,
     override val location: SourceLocation
 ) : StatementNode()
@@ -75,7 +75,7 @@ data class CallNode(
     override val location: SourceLocation
 ) : ExpressionNode()
 
-data class IntLiteral(
+data class IntLiteralNode(
     val value: Int,
     override val location: SourceLocation
 ) : ExpressionNode()

@@ -47,7 +47,7 @@ class CimpleAstGenerationVisitor : CimpleBaseVisitor<Node>() {
         val cond = ctx.cond?.accept(this) as ExpressionNode?
         val inc = ctx.inc?.accept(this) as VariableDefinitionNode?
         val body = ctx.body().stat().map { it.accept(this) as StatementNode }
-        return ForStatement(init, cond, inc, body, ctx.extractLocation())
+        return ForStatementNode(init, cond, inc, body, ctx.extractLocation())
     }
 
     override fun visitIfAttr(ctx: CimpleParser.IfAttrContext): Node {
@@ -65,7 +65,7 @@ class CimpleAstGenerationVisitor : CimpleBaseVisitor<Node>() {
 
     override fun visitRetAttr(ctx: CimpleParser.RetAttrContext): Node {
         val expr = ctx.expr()?.accept(this) as ExpressionNode?
-        return ReturnStatement(expr, ctx.extractLocation())
+        return ReturnNode(expr, ctx.extractLocation())
     }
 
     override fun visitExpr(ctx: CimpleParser.ExprContext): Node {
@@ -77,7 +77,7 @@ class CimpleAstGenerationVisitor : CimpleBaseVisitor<Node>() {
                 BinaryOperationNode(left, right, ctx.op.text.toBinaryOp(), loc)
             }
             ctx.expr().size == 1 -> ctx.expr(0).accept(this) as ExpressionNode // paren
-            ctx.NUM() != null -> IntLiteral(ctx.NUM().text.toInt(), loc)
+            ctx.NUM() != null -> IntLiteralNode(ctx.NUM().text.toInt(), loc)
             ctx.ID() != null -> VariableNode(ctx.ID().text, loc)
             ctx.call() != null -> ctx.call().accept(this)
             else -> unreachable(ctx.toString())

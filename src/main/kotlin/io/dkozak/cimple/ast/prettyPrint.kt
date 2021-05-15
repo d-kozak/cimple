@@ -65,7 +65,7 @@ private fun StringBuilder.serialize(node: Node, offset: Int, newLine: Boolean = 
             }
         }
 
-        is ForStatement -> {
+        is ForStatementNode -> {
             append("for ")
             if (node.initializer != null) serialize(node.initializer, 0, false)
             append(" ; ")
@@ -78,7 +78,7 @@ private fun StringBuilder.serialize(node: Node, offset: Int, newLine: Boolean = 
             append("}\n")
         }
 
-        is ReturnStatement -> {
+        is ReturnNode -> {
             append("return ")
             if (node.expression != null) serialize(node.expression, 0)
             append(";")
@@ -101,7 +101,7 @@ private fun StringBuilder.serialize(node: Node, offset: Int, newLine: Boolean = 
             append(")")
         }
 
-        is IntLiteral -> {
+        is IntLiteralNode -> {
             append(node.value)
         }
 
