@@ -5,8 +5,11 @@ data class SourceLocation(
     val cols: IntRange
 )
 
+var nextId = 1
+
 abstract class Node {
     abstract val location: SourceLocation
+    val id = nextId++
 }
 
 data class FileNode(val functions: List<FunctionNode>, override val location: SourceLocation) : Node()

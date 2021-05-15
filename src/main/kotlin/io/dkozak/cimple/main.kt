@@ -2,6 +2,7 @@ package io.dkozak.cimple
 
 import io.dkozak.cimple.ast.prettyPrint
 import io.dkozak.cimple.ast.toCimpleAst
+import io.dkozak.cimple.cfg.lower
 import java.io.File
 
 fun readInput(args: Array<String>): String {
@@ -21,6 +22,7 @@ fun run(input: String) {
     val ast = parse(input).toCimpleAst()
     println(ast)
     ast.prettyPrint()
+    ast.functions.map { it.lower() }.forEach { println(it) }
 }
 
 fun unreachable(msg: String = ""): Nothing = error("Should never get here. $msg")
